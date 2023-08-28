@@ -64,14 +64,10 @@ class ConversationalQAWithSourcesChain(RetrievalQAWithSourcesChain):
             retriever: The retriever to use to fetch relevant documents from.
             condense_question_prompt: The prompt to use to condense the chat history
                 and new question into a standalone question.
-            chain_type: The chain type to use to create the combine_docs_chain, will
-                be sent to `load_qa_chain`.
             verbose: Verbosity flag for logging to stdout.
             condense_question_llm: The language model to use for condensing the chat
                 history and new question into a standalone question. If none is
                 provided, will default to `llm`.
-            combine_docs_chain_kwargs: Parameters to pass as kwargs to `load_qa_chain`
-                when constructing the combine_docs_chain.
             callbacks: Callbacks to pass to all subchains.
             **kwargs: Additional parameters to pass when initializing
                 ConversationalRetrievalChain
@@ -215,7 +211,5 @@ class ConversationalQAWithSourcesChain(RetrievalQAWithSourcesChain):
         """
         Get docs.
         """
-        docs = await self.retriever.aget_relevant_documents(
-            question, callbacks=run_manager.get_child()
-        )
+        docs = await self.retriever.aget_relevant_documents(question, callbacks=run_manager.get_child())
         return self._reduce_tokens_below_limit(docs)
